@@ -1,142 +1,137 @@
 const express = require("express");
 const router = express.Router();
-const Product = require("../models/product");
+const Student = require("../models/Student");
 
-// GET /api/products - ดึงข้อมูล products ทั้งหมด
+// GET /api/students - ดึงข้อมูลนักเรียนทั้งหมด
 router.get("/", async (req, res) => {
   try {
-    console.log("📖 Getting all products...");
-    const products = await Product.find().sort({ createdAt: -1 });
+    console.log("📖 Getting all students...");
+    const students = await Student.getAll();
 
     res.json({
       success: true,
-      message: "Products retrieved successfully",
-      data: products,
-      count: products.length,
+      message: "Students retrieved successfully",
+      data: students,
+      count: students.length,
     });
   } catch (error) {
-    console.error("❌ Error getting products:", error.message);
+    console.error("❌ Error getting students:", error.message);
     res.status(500).json({
       success: false,
-      message: "Failed to get products",
+      message: "Failed to get students",
       error: error.message,
     });
   }
 });
 
-// GET /api/products/:id - ดึงข้อมูล product ตาม ID
+// GET /api/students/:id - ดึงข้อมูลนักเรียนตาม ID
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(`📖 Getting product with ID: ${id}`);
+    console.log(`📖 Getting student with ID: ${id}`);
 
-    const product = await Product.findById(id);
+    const student = await Student.getById(parseInt(id));
 
-    if (!product) {
+    if (!student) {
       return res.status(404).json({
         success: false,
-        message: `Product not found with ID: ${id}`,
+        message: `Student not found with ID: ${id}`,
       });
     }
 
     res.json({
       success: true,
-      message: "Product retrieved successfully",
-      data: product,
+      message: "Student retrieved successfully",
+      data: student,
     });
   } catch (error) {
-    console.error("❌ Error getting product:", error.message);
+    console.error("❌ Error getting student:", error.message);
     res.status(500).json({
       success: false,
-      message: "Failed to get product",
+      message: "Failed to get student",
       error: error.message,
     });
   }
 });
 
-// POST /api/products - เพิ่ม product ใหม่
+// POST /api/students - เพิ่มนักเรียนใหม่
 router.post("/", async (req, res) => {
   try {
-    const productData = req.body;
-    console.log("📝 Creating new product:", productData);
+    const studentData = req.body;
+    console.log("📝 Creating new student:", studentData);
 
-    const newProduct = new Product(productData);
-    const savedProduct = await newProduct.save();
+    const newStudent = await Student.create(studentData);
 
     res.status(201).json({
       success: true,
-      message: "Product created successfully",
-      data: savedProduct,
+      message: "Student created successfully",
+      data: newStudent,
     });
   } catch (error) {
-    console.error("❌ Error creating product:", error.message);
+    console.error("❌ Error creating student:", error.message);
     res.status(500).json({
       success: false,
-      message: "Failed to create product",
+      message: "Failed to create student",
       error: error.message,
     });
   }
 });
 
-// PUT /api/products/:id - อัพเดท product
+// PUT /api/students/:id - อัพเดทนักเรียน
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const productData = req.body;
-    console.log(`✏️ Updating product ID: ${id}`, productData);
+    const studentData = req.body;
+    console.log(`✏️ Updating student ID: ${id}`, studentData);
 
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      productData,
-      { new: true } // return updated document
-    );
+    const updatedStudent = await Student.update(parseInt(id), studentData);
 
-    if (!updatedProduct) {
+    if (!updatedStudent) {
       return res.status(404).json({
         success: false,
-        message: `Product not found with ID: ${id}`,
+        message: `Student not found with ID: ${id}`,
       });
     }
 
     res.json({
       success: true,
-      message: "Product updated successfully",
-      data: updatedProduct,
+      message: "Student updated successfully",
+      data: updatedStudent,
     });
   } catch (error) {
-    console.error("❌ Error updating product:", error.message);
+    console.error("❌ Error updating student:", error.message);
     res.status(500).json({
       success: false,
-      message: "Failed to update product",
+      message: "Failed to update student",
       error: error.message,
     });
   }
 });
 
-// DELETE /api/products/:id - ลบ product
+// DELETE /api/students/:id - ลบนักเรียน
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(`🗑️ Deleting product ID: ${id}`);
+    console.log(`🗑️ Deleting student ID: ${id}`);
 
-    const deletedProduct = await Product.findByIdAndDelete(id);
+    const deleted = await Student.delete(parseInt(id));
 
-    if (!deletedProduct) {
+    if (!deleted) {
       return res.status(404).json({
         success: false,
-        message: `Product not found with ID: ${id}`,
+        message: `Student not found with ID: ${id}`,
       });
     }
 
     res.json({
       success: true,
-      message: "Product deleted successfully",
+      message: "Student deleted successfully",
     });
   } catch (error) {
-    console.error("❌ Error deleting product:", error.message);
+    console.error("❌ Error deleting student:", error.message);
     res.status(500).json({
       success: false,
-      message: "Failed to delete product",
+      message: "Failed to delete student",
       error: error.message,
     });
   }

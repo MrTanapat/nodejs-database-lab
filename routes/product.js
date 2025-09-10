@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Product = require("../models/product");
+const Product = require("../models/Product");
 
 // GET /api/products - ดึงข้อมูล products ทั้งหมด
 router.get("/", async (req, res) => {
