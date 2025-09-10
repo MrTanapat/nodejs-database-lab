@@ -4,11 +4,11 @@ require("dotenv").config();
 
 // Import configurations
 const { connectMSSQL, connectMongoDB } = require("./config/database");
-const Student = require("./routes/Student");
+const Student = require("./models/Student");
 
 // Import routes
-const studentRoutes = require("./routes/students");
-const productRoutes = require("./routes/products");
+const studentRoutes = require("./routes/student");
+const productRoutes = require("./routes/product");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
