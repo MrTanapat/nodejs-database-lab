@@ -4,7 +4,7 @@ require("dotenv").config();
 
 // Import configurations
 const { connectMSSQL, connectMongoDB } = require("./config/database");
-const Student = require("./models/Student");
+const Student = require("./routes/Student");
 
 // Import routes
 const studentRoutes = require("./routes/students");
